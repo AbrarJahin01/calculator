@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NovaTools — Smart Utility Suite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#09090f;
+  --surface:#12121c;
+  --surface2:#1a1a29;
+  --line:rgba(255,255,255,0.08);
+
+  --cyan:#5ee7ff;
+  --purple:#9d7bff;
+  --pink:#ff73b9;
+  --gold:#ffd978;
+
+  --text:#f5f5ff;
+  --muted:#8787a4;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* BACKGROUND */
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(94,231,255,.15), transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(255,115,185,.14), transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(157,123,255,.10), transparent 45%);
+  pointer-events:none;
+}
+
+.grid-bg{
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(circle at center, black 40%, transparent 90%);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+
+.container{
+  position:relative;
+  z-index:1;
+  max-width:1100px;
+  margin:auto;
+  padding:50px 20px 90px;
+}
+
+/* HEADER */
+
+header{
+  text-align:center;
+  margin-bottom:50px;
+  animation:fadeDown .8s ease;
+}
+
+.logo{
+  width:90px;
+  height:90px;
+  border-radius:24px;
+  margin:auto auto 20px;
+  background:
+    linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2.2rem;
+  box-shadow:
+    0 0 40px rgba(94,231,255,.2),
+    0 0 80px rgba(157,123,255,.15);
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{ transform:translateY(0px);}
+  50%{ transform:translateY(-10px);}
+}
+
+h1{
+  font-family:'Cinzel',serif;
+  font-size:clamp(2.4rem,6vw,4rem);
+  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:1rem;
+  letter-spacing:.05em;
+}
+
+/* TABS */
+
+.tabs{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-bottom:40px;
+}
+
+.tab-btn{
+  border:none;
+  cursor:pointer;
+  padding:14px 26px;
+  border-radius:999px;
+  background:var(--surface);
+  color:var(--muted);
+  border:1px solid var(--line);
+  font-size:.95rem;
+  transition:.3s;
+}
+
+.tab-btn:hover{
+  transform:translateY(-2px);
+  color:var(--text);
+}
+
+.tab-btn.active{
+  color:white;
+  background:linear-gradient(135deg, rgba(94,231,255,.2), rgba(157,123,255,.2));
+  border-color:rgba(94,231,255,.35);
+  box-shadow:0 10px 30px rgba(94,231,255,.12);
+}
+
+/* PANELS */
+
+.panel{
+  display:none;
+  animation:fade .4s ease;
+}
+
+.panel.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(14px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* CARD */
+
+.card{
+  background:rgba(18,18,28,.9);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:40px;
+  position:relative;
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,
+    transparent,
+    rgba(255,255,255,.03),
+    transparent);
+  transform:translateX(-100%);
+  animation:shine 6s infinite linear;
+}
+
+@keyframes shine{
+  to{
+    transform:translateX(100%);
+  }
+}
+
+.card-title{
+  font-size:1.7rem;
+  margin-bottom:8px;
+  font-weight:700;
+}
+
+.card-desc{
+  color:var(--muted);
+  margin-bottom:30px;
+  line-height:1.6;
+}
+
+/* FORM */
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+@media(max-width:700px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    padding:28px;
+  }
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+label{
+  font-size:.8rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+input{
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:15px 18px;
+  color:var(--text);
+  font-size:1rem;
+  outline:none;
+  transition:.25s;
+}
+
+input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 4px rgba(94,231,255,.12);
+}
+
+/* BUTTON */
+
+.btn{
+  width:100%;
+  margin-top:24px;
+  padding:16px;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+  font-size:1rem;
+  font-weight:600;
+  color:white;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(94,231,255,.18);
+}
+
+/* RESULT */
+
+.result{
+  margin-top:30px;
+  background:var(--surface2);
+  border-radius:22px;
+  padding:30px;
+  border:1px solid var(--line);
+  display:none;
+}
+
+.result.show{
+  display:block;
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  from{
+    opacity:0;
+    transform:scale(.95);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.big{
+  font-size:4rem;
+  font-weight:700;
+  text-align:center;
+  margin-bottom:10px;
+  font-family:'Cinzel',serif;
+  color:var(--cyan);
+}
+
+.center{
+  text-align:center;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.stats{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+@media(max-width:700px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+
+.stat{
+  background:rgba(255,255,255,.03);
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+}
+
+.stat h3{
+  font-size:1.8rem;
+  color:var(--gold);
+}
+
+.stat p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:.8rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+/* QUIZ */
+
+.quiz-score{
+  font-size:5rem;
+  text-align:center;
+  color:var(--pink);
+  font-family:'Cinzel',serif;
+}
+
+.quiz-msg{
+  text-align:center;
+  margin-top:10px;
+  font-size:1.1rem;
+}
+
+/* FOOTER */
+
+footer{
+  margin-top:60px;
+  text-align:center;
+  color:var(--muted);
+  opacity:.6;
+  font-size:.85rem;
+}
+
+/* ANIM */
+
+@keyframes fadeDown{
+  from{
+    opacity:0;
+    transform:translateY(-20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="container">
+
+<header>
+  <div class="logo">⚡</div>
+  <h1>NovaTools</h1>
+  <div class="subtitle">
+    Smart Utilities · Futuristic Experience
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('bmi')">
+    💪 BMI Calculator
+  </button>
+
+  <button class="tab-btn" onclick="switchTab('quiz')">
+    🧠 Personality Quiz
+  </button>
+
+  <button class="tab-btn" onclick="switchTab('timer')">
+    ⏳ Focus Timer
+  </button>
+</div>
+
+<!-- BMI PANEL -->
+
+<div class="panel active" id="bmi">
+
+  <div class="card">
+
+    <div class="card-title">💪 BMI Calculator</div>
+
+    <div class="card-desc">
+      Calculate your Body Mass Index instantly with a futuristic interface.
+    </div>
+
+    <div class="grid">
+
+      <div class="field">
+        <label>Height (cm)</label>
+        <input type="number" id="height" placeholder="e.g. 175">
+      </div>
+
+      <div class="field">
+        <label>Weight (kg)</label>
+        <input type="number" id="weight" placeholder="e.g. 68">
+      </div>
+
+    </div>
+
+    <button class="btn" onclick="calculateBMI()">
+      Calculate BMI
+    </button>
+
+    <div class="result" id="bmi-result">
+
+      <div class="big" id="bmi-value">22.0</div>
+
+      <div class="center muted" id="bmi-status">
+        Healthy
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <h3 id="ideal-min">60</h3>
+          <p>Ideal Min</p>
+        </div>
+
+        <div class="stat">
+          <h3 id="ideal-max">76</h3>
+          <p>Ideal Max</p>
+        </div>
+
+        <div class="stat">
+          <h3 id="health-score">92%</h3>
+          <p>Health Score</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- QUIZ PANEL -->
+
+<div class="panel" id="quiz">
+
+  <div class="card">
+
+    <div class="card-title">🧠 Personality Energy Quiz</div>
+
+    <div class="card-desc">
+      Answer a simple question and discover your energy type.
+    </div>
+
+    <div class="field">
+      <label>Choose One</label>
+
+      <input type="text"
+             id="quiz-input"
+             placeholder="Type: Creative / Calm / Bold / Logical">
+    </div>
+
+    <button class="btn" onclick="runQuiz()">
+      Reveal Personality
+    </button>
+
+    <div class="result" id="quiz-result">
+
+      <div class="quiz-score" id="quiz-icon">
+        ✨
+      </div>
+
+      <div class="quiz-msg" id="quiz-text">
+        You radiate creative energy.
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- TIMER PANEL -->
+
+<div class="panel" id="timer">
+
+  <div class="card">
+
+    <div class="card-title">⏳ Focus Timer</div>
+
+    <div class="card-desc">
+      Stay productive using a beautiful countdown timer.
+    </div>
+
+    <div class="big" id="timer-display">
+      25:00
+    </div>
+
+    <div class="grid">
+
+      <button class="btn" onclick="startTimer()">
+        ▶ Start
+      </button>
+
+      <button class="btn" onclick="resetTimer()">
+        🔄 Reset
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  NovaTools · Designed with futuristic UI aesthetics ✨
+</footer>
+
+</div>
+
+<script>
+
+/* TAB SWITCH */
+
+function switchTab(id){
+
+  document.querySelectorAll('.panel')
+    .forEach(p=>p.classList.remove('active'));
+
+  document.querySelectorAll('.tab-btn')
+    .forEach(b=>b.classList.remove('active'));
+
+  document.getElementById(id)
+    .classList.add('active');
+
+  event.target.classList.add('active');
+}
+
+/* BMI */
+
+function calculateBMI(){
+
+  const h =
+    parseFloat(document.getElementById('height').value);
+
+  const w =
+    parseFloat(document.getElementById('weight').value);
+
+  if(!h || !w) return;
+
+  const bmi = w / ((h/100)*(h/100));
+
+  let status = '';
+
+  if(bmi < 18.5){
+    status = 'Underweight';
+  }
+  else if(bmi < 25){
+    status = 'Healthy';
+  }
+  else if(bmi < 30){
+    status = 'Overweight';
+  }
+  else{
+    status = 'Obese';
+  }
+
+  document.getElementById('bmi-value')
+    .textContent = bmi.toFixed(1);
+
+  document.getElementById('bmi-status')
+    .textContent = status;
+
+  document.getElementById('ideal-min')
+    .textContent = Math.round((18.5 * (h/100)*(h/100)));
+
+  document.getElementById('ideal-max')
+    .textContent = Math.round((24.9 * (h/100)*(h/100)));
+
+  const score =
+    Math.max(0, 100 - Math.abs(22 - bmi) * 8);
+
+  document.getElementById('health-score')
+    .textContent = Math.round(score) + '%';
+
+  document.getElementById('bmi-result')
+    .classList.add('show');
+}
+
+/* QUIZ */
+
+function runQuiz(){
+
+  const val =
+    document.getElementById('quiz-input')
+      .value
+      .trim()
+      .toLowerCase();
+
+  const result =
+    document.getElementById('quiz-result');
+
+  const icon =
+    document.getElementById('quiz-icon');
+
+  const text =
+    document.getElementById('quiz-text');
+
+  if(val.includes('creative')){
+    icon.textContent='🎨';
+    text.textContent='You are imaginative and full of artistic energy.';
+  }
+  else if(val.includes('calm')){
+    icon.textContent='🌙';
+    text.textContent='You bring peace and balance everywhere.';
+  }
+  else if(val.includes('bold')){
+    icon.textContent='🔥';
+    text.textContent='You thrive on ambition, courage, and action.';
+  }
+  else{
+    icon.textContent='🧠';
+    text.textContent='You think deeply and solve problems brilliantly.';
+  }
+
+  result.classList.add('show');
+}
+
+/* TIMER */
+
+let seconds = 1500;
+let interval = null;
+
+function updateTimer(){
+
+  const mins =
+    String(Math.floor(seconds/60)).padStart(2,'0');
+
+  const secs =
+    String(seconds%60).padStart(2,'0');
+
+  document.getElementById('timer-display')
+    .textContent = `${mins}:${secs}`;
+}
+
+function startTimer(){
+
+  if(interval) return;
+
+  interval = setInterval(()=>{
+
+    if(seconds > 0){
+      seconds--;
+      updateTimer();
+    }
+    else{
+      clearInterval(interval);
+      interval = null;
+      alert('Session Complete ✨');
+    }
+
+  },1000);
+}
+
+function resetTimer(){
+
+  clearInterval(interval);
+
+  interval = null;
+
+  seconds = 1500;
+
+  updateTimer();
+}
+
+</script>
+
+</body>
+</html>
